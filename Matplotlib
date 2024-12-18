@@ -1,0 +1,42 @@
+import numpy as np
+from scipy.optimize import curve_fit
+import matplotlib.pyplot as plt
+import pandas as pd
+
+def periodic_function(x, a, b, c, d):
+    return a * np.sin(b * x + c) + d
+
+months = np.arange(12)
+max_temps = [39, 41, 43, 47, 49, 51, 45, 38, 37, 29, 27, 25]
+min_temps = [21, 23, 27, 28, 32, 35, 31, 28, 21, 19, 17, 18]
+
+popt_max, _ = curve_fit(periodic_function, months, max_temps, p0=[10, 0.5, 0, 40])
+popt_min, _ = curve_fit(periodic_function, months, min_temps, p0=[10, 0.5, 0, 20])
+
+plt.figure(figsize=(10, 6))
+plt.plot(months, max_temps, "ro", label="Max Temps")
+plt.plot(months, min_temps, "bo", label="Min Temps")
+plt.plot(months, periodic_function(months, *popt_max), "r-", label="Max Temp Fit")
+plt.plot(months, periodic_function(months, *popt_min), "b-", label="Min Temp Fit")
+plt.xlabel("Month")
+plt.ylabel("Temperature (C)")
+plt.title("Temperature Fit for a Year")
+plt.legend()
+plt.show()
+
+url = "https://raw.githubusercontent.com/Geoyi/Cleaning-Titanic-Data/master/titanic_original.csv"
+titanic = pd.read_csv(url)
+
+gender_counts = titanic['sex'].value_counts()
+plt.figure(figsize=(6, 6))
+plt.pie(gender_counts, labels=gender_counts.index, autopct="%1.1f%%", startangle=140, colors=["skyblue", "pink"])
+plt.title("Male/Female Proportion")
+plt.show()
+
+plt.figure(figsize=(10, 6))
+colors = titanic['sex'].map({"male": "blue", "female": "red"})
+plt.scatter(titanic['age'], titanic['fare'], c=colors, alpha=0.5)
+plt.xlabel("Age")
+plt.ylabel("Fare")
+plt.title("Fare Paid vs. Age (Colored by Gender)")
+plt.show()
