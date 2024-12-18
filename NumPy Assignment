@@ -1,0 +1,30 @@
+def generate_vandermonde_matrix(vector, N, increasing=False):
+    import numpy as np
+    if increasing:
+        return np.column_stack([vector ** i for i in range(N)])
+    else:
+        return np.column_stack([vector ** (N - i - 1) for i in range(N)])
+
+def moving_average(sequence, window_size):
+    if window_size <= 0:
+        raise ValueError("Window size must be greater than 0.")
+    if len(sequence) < window_size:
+        raise ValueError("Window size must be less than or equal to the sequence length.")
+
+    return [
+        sum(sequence[i:i + window_size]) / window_size
+        for i in range(len(sequence) - window_size + 1)
+    ]
+
+vector = [1, 2, 3, 4]
+N = 4
+print("Vandermonde Matrix (increasing=False):")
+print(generate_vandermonde_matrix(vector, N, increasing=False))
+
+print("\nVandermonde Matrix (increasing=True):")
+print(generate_vandermonde_matrix(vector, N, increasing=True))
+
+sequence = [3, 5, 7, 2, 8, 10, 11, 65, 72, 81, 99, 100, 150]
+window_size = 3
+print("\nMoving Averages:")
+print(moving_average(sequence, window_size))
